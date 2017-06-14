@@ -2,7 +2,7 @@ var webpack = require('webpack'),
     path = require('path'),
     yargs = require('yargs');
  
-var libraryName = 'innoway',
+var libraryName = 'innoway_chatbot',
     plugins = [],
     outputFile;
  
@@ -16,7 +16,7 @@ if (yargs.argv.p) {
 var config = {
   entry: [
     // __dirname + '/src/TestClass.ts',
-    __dirname + '/src/module.ts'
+    __dirname + '/src/index.ts'
   ],
   devtool: 'source-map',
   output: {

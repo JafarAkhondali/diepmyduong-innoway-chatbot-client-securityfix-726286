@@ -1,4 +1,4 @@
-import { ServerConfig } from './server.config';
+import { DefaultConfig } from './default.config';
 declare var $:any,window:any,FB:any;
 
 //Facebook Config
@@ -10,9 +10,9 @@ export const FBConfig= () => {
     var id = 'facebook-jssdk';
     window.fbAsyncInit = function() {
         FB.init({
-        appId      : ServerConfig.FBAPI,
-        xfbml      : true,
-        version    : 'v2.9'
+            appId      : DefaultConfig.facebook.app_id,
+            xfbml      : true,
+            version    : 'v2.9'
         });
         FB.AppEvents.logPageView();
     };
