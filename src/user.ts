@@ -1,6 +1,6 @@
 //Import Config
 import { DefaultConfig } from './configs/default.config';
-
+import { API } from './configs/api.config';
 
 declare var $:any,FB:any,gapi:any,window:any;
 
@@ -15,6 +15,7 @@ export class User {
 
     //Hàm khởi tạo với tham số token là Optional
     constructor(token:string = null){
+        
     } 
 
     //Khai báo hàm private 
@@ -30,7 +31,7 @@ export class User {
         //Sử dụng ajax để access API
         $.ajax({
             type: 'POST',
-            url: DefaultConfig.host+'api/me',
+            url: API.pages.getAllPages,
             dataType:'json',
             data: { //Dữ liệu json gửi đi
                 Phone   : phone,
@@ -70,6 +71,7 @@ export class User {
         var self = this;
         FB.login(function(response:any) {
             if (response.authResponse) {
+                console.log("FB Login Success", response);
                 // self.getUserWithProvider('facebook',FB.getUserID(),callback);
             } else {
                 callback('User cancelled login or did not fully authorize.',null);

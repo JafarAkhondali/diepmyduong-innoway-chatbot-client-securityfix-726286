@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/innoway-chatbot.min.js",
   "scripts": {
-    "prepublish": "webpack --debug; webpack -p;"
+    "prepublish": "webpack --debug; webpack -p;",
+    "test": "node test/index.js"
   },
   "keywords": [
     "example",
@@ -20,5 +21,8 @@
     "webpack": "^1.12.14",
     "yargs": "^4.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "path": "^0.12.7"
+  }
 }

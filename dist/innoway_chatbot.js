@@ -64,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	var user_1 = __webpack_require__(2);
 	//LOAD DACEBOOK CONFIG
-	var fb_config_1 = __webpack_require__(4);
+	var fb_config_1 = __webpack_require__(5);
 	fb_config_1.FBConfig();
 	module.exports = {
 	    User: user_1.User
@@ -76,8 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	//Import Config
-	var default_config_1 = __webpack_require__(3);
+	var api_config_1 = __webpack_require__(3);
 	var User = (function () {
 	    //Hàm khởi tạo với tham số token là Optional
 	    function User(token) {
@@ -100,7 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //Sử dụng ajax để access API
 	        $.ajax({
 	            type: 'POST',
-	            url: default_config_1.DefaultConfig.host + 'api/me',
+	            url: api_config_1.API.pages.getAllPages,
 	            dataType: 'json',
 	            data: {
 	                Phone: phone,
@@ -141,6 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var self = this;
 	        FB.login(function (response) {
 	            if (response.authResponse) {
+	                console.log("FB Login Success", response);
 	            }
 	            else {
 	                callback('User cancelled login or did not fully authorize.', null);
@@ -171,23 +171,37 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	exports.DefaultConfig = {
-	    host: "https://jerry-chatbot.herokuapp.com/",
-	    facebook: {
-	        app_id: "276104969472219" //Innoway
+	var default_config_1 = __webpack_require__(4);
+	exports.API = {
+	    pages: {
+	        getAllPages: default_config_1.DefaultConfig.host + "api/me/pages",
+	        subscribe: default_config_1.DefaultConfig.host + "api/me/pages/subscribe",
 	    }
 	};
 
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	exports.DefaultConfig = {
+	    host: "https://jerry-chatbot.herokuapp.com/",
+	    facebook: {
+	        app_id: "143366482876596" //Innoway
+	    }
+	};
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var default_config_1 = __webpack_require__(3);
+	var default_config_1 = __webpack_require__(4);
 	//Facebook Config
 	exports.FBConfig = function () {
 	    var d = document;
@@ -207,7 +221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    js = d.createElement(s);
 	    js.id = id;
-	    js.src = "//connect.facebook.net/en_US/sdk.js";
+	    js.src = "https://connect.facebook.net/en_US/sdk.js";
 	    fjs.parentNode.insertBefore(js, fjs);
 	};
 
