@@ -8,7 +8,7 @@ export class URL {
         var url = DefaultConfig.host;
         if(params){
             Object.keys(params).map(key =>{
-                path.replace("/\{\{"+key+"\}\}/g",params[key]);
+                path = path.replace(new RegExp("\{\{"+ key +"\}\}", 'g'),params[key]);
             })
         }
         if(query){

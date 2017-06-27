@@ -65,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var user_1 = __webpack_require__(2);
 	var page_1 = __webpack_require__(5);
 	//LOAD DACEBOOK CONFIG
-	var fb_config_1 = __webpack_require__(6);
+	var fb_config_1 = __webpack_require__(7);
 	fb_config_1.FBConfig();
 	module.exports = {
 	    User: user_1.User,
@@ -254,13 +254,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	var URL = (function () {
 	    function URL() {
 	    }
+	    //Author: Dương Jerry
+	    //Description: get API full url
 	    URL.apiUrl = function (path, query, params) {
 	        if (query === void 0) { query = null; }
 	        if (params === void 0) { params = null; }
 	        var url = default_config_1.DefaultConfig.host;
 	        if (params) {
 	            Object.keys(params).map(function (key) {
-	                path.replace("/\{\{" + key + "\}\}/g", params[key]);
+	                path = path.replace(new RegExp("\{\{" + key + "\}\}", 'g'), params[key]);
 	            });
 	        }
 	        if (query) {
@@ -296,11 +298,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	var helper_1 = __webpack_require__(3);
+	var story_1 = __webpack_require__(6);
 	var Page = (function () {
 	    function Page(token) {
 	        this._token = token;
 	    }
-	    //GET SETTINGS
+	    //Author: Dương Jerry
+	    //Description: Get page settings
 	    Page.prototype.getSettings = function (callback) {
 	        if (callback === void 0) { callback = function () { }; }
 	        var self = this;
@@ -319,7 +323,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
-	    //Active Settings
+	    //Author: Dương Jerry
+	    //Description: Active page settings
 	    Page.prototype.activeSetting = function (data, callback) {
 	        if (callback === void 0) { callback = function () { }; }
 	        var self = this;
@@ -341,6 +346,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Deative page settings
 	    Page.prototype.deActiveSetting = function (types, callback) {
 	        if (callback === void 0) { callback = function () { }; }
 	        var self = this;
@@ -364,6 +371,103 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Get all Stories
+	    Page.prototype.getStories = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories"),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": this._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Return Story Object
+	    Page.prototype.buildStory = function (story) {
+	        return new story_1.Story(this._token, story);
+	    };
+	    //Author: Dương Jerry
+	    //Description: Return Story Object
+	    Page.prototype.getStory = function (story_id, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}", null, { story_id: story_id }),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            if (response != null) {
+	                callback(null, self.buildStory(response));
+	            }
+	            else {
+	                callback("Not found", null);
+	            }
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: New Story
+	    Page.prototype.newStory = function (title, callback) {
+	        if (title === void 0) { title = "My Story"; }
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories"),
+	            "method": "POST",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	            "data": JSON.stringify({ title: title })
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, self.buildStory(response));
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Remove Story
+	    Page.prototype.removeStory = function (story_id, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}", null, { story_id: story_id }),
+	            "method": "DELETE",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
 	    Page.SettingTypes = {
 	        GREETING: "greeting",
 	        PRESISTENT_MENU: "persistent_menu",
@@ -376,6 +480,231 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var helper_1 = __webpack_require__(3);
+	var Story = (function () {
+	    function Story(page_token, story) {
+	        this._token = page_token;
+	        this._story = story;
+	    }
+	    //Author: Dương Jerry
+	    //Description: Get story cards
+	    Story.prototype.getCards = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/cards", null, { story_id: self._story._id }),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Add Card
+	    Story.prototype.addCard = function (card, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/cards", null, {
+	                story_id: self._story._id
+	            }),
+	            "method": "POST",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	            "data": JSON.stringify(card)
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Remove Card
+	    Story.prototype.removeCard = function (card_id, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/cards/{{card_id}}", null, {
+	                story_id: self._story._id, card_id: card_id
+	            }),
+	            "method": "DELETE",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Update Card
+	    Story.prototype.updateCard = function (card, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/cards/{{card_id}}", null, {
+	                story_id: self._story._id, card_id: card._id
+	            }),
+	            "method": "PUT",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "data": JSON.stringify(card)
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Get Story Keys
+	    Story.prototype.getKeys = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/keys", null, { story_id: self._story._id }),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Add Key
+	    Story.prototype.addKey = function (key, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/keys", null, {
+	                story_id: self._story._id
+	            }),
+	            "method": "POST",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	            "data": JSON.stringify({ key: key })
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Remove Key
+	    Story.prototype.removeKey = function (key_id, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/keys/{{key_id}}", null, {
+	                story_id: self._story._id, key_id: key_id
+	            }),
+	            "method": "DELETE",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Update Key
+	    Story.prototype.updateKey = function (key, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/keys/{{key_id}}", null, {
+	                story_id: self._story._id, key_id: key._id
+	            }),
+	            "method": "PUT",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "data": JSON.stringify(key)
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Remove Story
+	    Story.prototype.destroy = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}", null, { story_id: self._story._id }),
+	            "method": "DELETE",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    return Story;
+	}());
+	exports.Story = Story;
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
