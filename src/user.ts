@@ -20,15 +20,17 @@ export class User {
     //Hàm khởi tạo với tham số token là Optional
     constructor(token:string = null){
         var self = this;
-        FB.getLoginStatus((res:any) =>{
-            console.log("LOGIN STATUS ",res);
-            if(res.status === "connected"){
-                self._token = res.authResponse.accessToken;
-                self.authenticated = true;
-                $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
-            }else{
-                // self.loginWithFacebook();
-            }
+        $(window).on("innoway-chatbot.fbLoaded",()=>{
+            FB.getLoginStatus((res:any) =>{
+                console.log("LOGIN STATUS ",res);
+                if(res.status === "connected"){
+                    self._token = res.authResponse.accessToken;
+                    self.authenticated = true;
+                    $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
+                }else{
+                    // self.loginWithFacebook();
+                }
+            })
         })
     } 
 
@@ -169,10 +171,10 @@ export class User {
         });
     }
 
-    public getInfo(callback:any = ()=>{},fields = "email,id,birthday,name"){
+    public getInfo(callback:any = ()=>{},fields = "email,id,birthday,name",size = "large"){
         var self = this;
         if(!self.isAuthenticated(callback)) return;
-        FB.api('/me','GET',{ "fields": fields },
+        FB.api('/me','GET',{ "fields": fields , "type": size},
             (res:any) => {
                 callback(null,res);
             }
