@@ -27,7 +27,7 @@ export class User {
                 self.authenticated = true;
                 $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
             }else{
-                self.loginWithFacebook();
+                // self.loginWithFacebook();
             }
         })
     } 

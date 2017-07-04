@@ -1,18 +1,25 @@
 //Import Config
 import { DefaultConfig } from './configs/default.config';
 import { URL } from './utils/helper';
+import { Page} from './page';
 
 declare var $:any,FB:any;
 
 export class Story {
-
+    _page: Page
     _token:string;
     _cards:[any];
     _keys:[any];
     _story:any;
 
-    constructor(page_token:string,story:any){
-        this._token = page_token;
+    public static EventTypes = {
+        CARDS_CHANGE: "innoway_chatbot.story.card_change",
+        KEYS_CHANGE: "innoway_chatbot.story.key_change",
+    }
+
+    constructor(page:Page,story:any){
+        this._page = page;
+        this._token = page._token;
         this._story = story;
     }
 
@@ -59,6 +66,7 @@ export class Story {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Story.EventTypes.CARDS_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -83,6 +91,7 @@ export class Story {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Story.EventTypes.CARDS_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -108,6 +117,7 @@ export class Story {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Story.EventTypes.CARDS_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -157,6 +167,7 @@ export class Story {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Story.EventTypes.KEYS_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -181,6 +192,7 @@ export class Story {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Story.EventTypes.KEYS_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -206,6 +218,7 @@ export class Story {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Story.EventTypes.KEYS_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -226,7 +239,51 @@ export class Story {
                 "content-type": "application/json",
             }
         }
+        $.ajax(settings).done((response:any) => {
+            $(self._page).trigger(Page.EventTypes.STORY_CHANGE,response);
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        });
+    }
 
+    //Author: Dương Jerry
+    //Description: Update Story
+    public update(title:string,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/stories/{{story_id}}",null,{story_id:self._story._id}),
+            "method": "PUT",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json",
+            },
+            "data": JSON.stringify({ title: title})
+        }
+        $.ajax(settings).done((response:any) => {
+            $(self._page).trigger(Page.EventTypes.STORY_CHANGE,response);
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        });
+    }
+
+    //Author: Dương Jerry
+    //Description: Add Key
+    public setAsGetStarted(callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/stories/{{story_id}}/setStarted",null,{story_id:self._story._id}),
+            "method": "POST",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json",
+            }
+        }
         $.ajax(settings).done((response:any) => {
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {

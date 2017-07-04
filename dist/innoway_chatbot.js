@@ -93,7 +93,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE, self.authenticated);
 	            }
 	            else {
-	                self.loginWithFacebook();
 	            }
 	        });
 	    }
@@ -341,6 +340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "data": JSON.stringify(data)
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Page.EventTypes.SETTING_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -366,6 +366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            })
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Page.EventTypes.SETTING_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -395,7 +396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //Author: Dương Jerry
 	    //Description: Return Story Object
 	    Page.prototype.buildStory = function (story) {
-	        return new story_1.Story(this._token, story);
+	        return new story_1.Story(this, story);
 	    };
 	    //Author: Dương Jerry
 	    //Description: Return Story Object
@@ -442,6 +443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "data": JSON.stringify({ title: title })
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Page.EventTypes.STORY_CHANGE, response);
 	            callback(null, self.buildStory(response));
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -463,6 +465,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Page.EventTypes.SETTING_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -472,6 +475,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        GREETING: "greeting",
 	        PRESISTENT_MENU: "persistent_menu",
 	        GET_STARTED: "get_started",
+	    };
+	    Page.EventTypes = {
+	        SETTING_CHANGE: "innoway_chatbot.page.setting_change",
+	        STORY_CHANGE: "innoway_chatbot.page.story_change",
 	    };
 	    return Page;
 	}());
@@ -484,9 +491,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	var helper_1 = __webpack_require__(3);
+	var page_1 = __webpack_require__(5);
 	var Story = (function () {
-	    function Story(page_token, story) {
-	        this._token = page_token;
+	    function Story(page, story) {
+	        this._page = page;
+	        this._token = page._token;
 	        this._story = story;
 	    }
 	    //Author: Dương Jerry
@@ -531,6 +540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "data": JSON.stringify(card)
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Story.EventTypes.CARDS_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -554,6 +564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Story.EventTypes.CARDS_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -578,6 +589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "data": JSON.stringify(card)
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Story.EventTypes.CARDS_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -625,6 +637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "data": JSON.stringify({ key: key })
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Story.EventTypes.KEYS_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -648,6 +661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Story.EventTypes.KEYS_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -672,6 +686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "data": JSON.stringify(key)
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self).trigger(Story.EventTypes.KEYS_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
@@ -693,10 +708,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 	        $.ajax(settings).done(function (response) {
+	            $(self._page).trigger(page_1.Page.EventTypes.STORY_CHANGE, response);
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
 	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Update Story
+	    Story.prototype.update = function (title, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}", null, { story_id: self._story._id }),
+	            "method": "PUT",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "data": JSON.stringify({ title: title })
+	        };
+	        $.ajax(settings).done(function (response) {
+	            $(self._page).trigger(page_1.Page.EventTypes.STORY_CHANGE, response);
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Add Key
+	    Story.prototype.setAsGetStarted = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/stories/{{story_id}}/setStarted", null, { story_id: self._story._id }),
+	            "method": "POST",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    Story.EventTypes = {
+	        CARDS_CHANGE: "innoway_chatbot.story.card_change",
+	        KEYS_CHANGE: "innoway_chatbot.story.key_change",
 	    };
 	    return Story;
 	}());

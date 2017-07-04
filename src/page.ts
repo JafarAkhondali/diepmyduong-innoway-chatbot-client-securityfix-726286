@@ -15,6 +15,11 @@ export class Page {
         GET_STARTED: "get_started",
     }
 
+    public static EventTypes = {
+        SETTING_CHANGE: "innoway_chatbot.page.setting_change",
+        STORY_CHANGE: "innoway_chatbot.page.story_change",
+    }
+
     constructor(token:string){
         this._token = token;
     }
@@ -57,6 +62,7 @@ export class Page {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Page.EventTypes.SETTING_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -81,8 +87,8 @@ export class Page {
                 types: types
             })
         }
-
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Page.EventTypes.SETTING_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -114,7 +120,7 @@ export class Page {
     //Author: Dương Jerry
     //Description: Return Story Object
     public buildStory(story:any){
-        return new Story(this._token,story);
+        return new Story(this,story);
     }
 
     //Author: Dương Jerry
@@ -161,6 +167,7 @@ export class Page {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Page.EventTypes.STORY_CHANGE,response);
             callback(null,self.buildStory(response));
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
@@ -183,6 +190,7 @@ export class Page {
         }
 
         $.ajax(settings).done((response:any) => {
+            $(self).trigger(Page.EventTypes.SETTING_CHANGE,response);
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
