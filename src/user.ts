@@ -20,7 +20,22 @@ export class User {
     //Hàm khởi tạo với tham số token là Optional
     constructor(token:string = null){
         var self = this;
-        $(window).on("innoway-chatbot.fbLoaded",()=>{
+        if(!window.fbLoaded){
+            $(window).on("innoway-chatbot.fbLoaded",()=>{
+                console.log("FACEBOOK LOADED");
+                FB.getLoginStatus((res:any) =>{
+                    console.log("LOGIN STATUS ",res);
+                    if(res.status === "connected"){
+                        self._token = res.authResponse.accessToken;
+                        self.authenticated = true;
+                        $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
+                    }else{
+                        console.log("not connected");
+                        // self.loginWithFacebook();
+                    }
+                })
+            })
+        }else{
             FB.getLoginStatus((res:any) =>{
                 console.log("LOGIN STATUS ",res);
                 if(res.status === "connected"){
@@ -28,10 +43,12 @@ export class User {
                     self.authenticated = true;
                     $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
                 }else{
+                    console.log("not connected");
                     // self.loginWithFacebook();
                 }
             })
-        })
+        }
+        
     } 
 
     //Khai báo hàm private 

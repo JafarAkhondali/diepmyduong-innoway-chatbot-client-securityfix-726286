@@ -15,7 +15,8 @@ export const FBConfig= () => {
             version    : 'v2.9'
         });
         FB.AppEvents.logPageView();
-        $(window).trigger("innoway-chatbot.fbLoaded");
+        window.fbLoaded = true;
+        $(window).trigger("innoway-chatbot.fbLoaded",window.fbLoaded);
     };
     var js:any, fjs:any = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {return;}

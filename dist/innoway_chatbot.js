@@ -85,16 +85,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (token === void 0) { token = null; }
 	        this.authenticated = false;
 	        var self = this;
-	        FB.getLoginStatus(function (res) {
-	            console.log("LOGIN STATUS ", res);
-	            if (res.status === "connected") {
-	                self._token = res.authResponse.accessToken;
-	                self.authenticated = true;
-	                $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE, self.authenticated);
-	            }
-	            else {
-	            }
-	        });
+	        if (!window.fbLoaded) {
+	            $(window).on("innoway-chatbot.fbLoaded", function () {
+	                console.log("FACEBOOK LOADED");
+	                FB.getLoginStatus(function (res) {
+	                    console.log("LOGIN STATUS ", res);
+	                    if (res.status === "connected") {
+	                        self._token = res.authResponse.accessToken;
+	                        self.authenticated = true;
+	                        $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE, self.authenticated);
+	                    }
+	                    else {
+	                        console.log("not connected");
+	                    }
+	                });
+	            });
+	        }
+	        else {
+	            FB.getLoginStatus(function (res) {
+	                console.log("LOGIN STATUS ", res);
+	                if (res.status === "connected") {
+	                    self._token = res.authResponse.accessToken;
+	                    self.authenticated = true;
+	                    $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE, self.authenticated);
+	                }
+	                else {
+	                    console.log("not connected");
+	                }
+	            });
+	        }
 	    }
 	    //Khai báo hàm private 
 	    //Tham số là 1 hàm callback Optional
@@ -233,13 +252,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
-	    User.prototype.getInfo = function (callback, fields) {
+	    User.prototype.getInfo = function (callback, fields, size) {
 	        if (callback === void 0) { callback = function () { }; }
 	        if (fields === void 0) { fields = "email,id,birthday,name"; }
+	        if (size === void 0) { size = "large"; }
 	        var self = this;
 	        if (!self.isAuthenticated(callback))
 	            return;
-	        FB.api('/me', 'GET', { "fields": fields }, function (res) {
+	        FB.api('/me', 'GET', { "fields": fields, "type": size }, function (res) {
 	            callback(null, res);
 	        });
 	    };
@@ -795,6 +815,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            version: 'v2.9'
 	        });
 	        FB.AppEvents.logPageView();
+	        window.fbLoaded = true;
+	        $(window).trigger("innoway-chatbot.fbLoaded", window.fbLoaded);
 	    };
 	    var js, fjs = d.getElementsByTagName(s)[0];
 	    if (d.getElementById(id)) {
