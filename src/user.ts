@@ -168,5 +168,15 @@ export class User {
             callback(err,status);
         });
     }
+
+    public getInfo(callback:any = ()=>{},fields = "email,id,birthday,name"){
+        var self = this;
+        if(!self.isAuthenticated(callback)) return;
+        FB.api('/me','GET',{ "fields": fields },
+            (res:any) => {
+                callback(null,res);
+            }
+        )
+    }
 }
 

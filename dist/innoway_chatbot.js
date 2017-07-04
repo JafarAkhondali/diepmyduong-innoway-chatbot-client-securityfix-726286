@@ -233,6 +233,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    User.prototype.getInfo = function (callback, fields) {
+	        if (callback === void 0) { callback = function () { }; }
+	        if (fields === void 0) { fields = "email,id,birthday,name"; }
+	        var self = this;
+	        if (!self.isAuthenticated(callback))
+	            return;
+	        FB.api('/me', 'GET', { "fields": fields }, function (res) {
+	            callback(null, res);
+	        });
+	    };
 	    //Khai báo biến static
 	    User.cards = [];
 	    User.EventTypes = {
@@ -792,7 +802,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    js = d.createElement(s);
 	    js.id = id;
-	    js.src = "https://connect.facebook.net/en_US/sdk.js";
+	    js.src = "//connect.facebook.net/en_US/sdk.js";
 	    fjs.parentNode.insertBefore(js, fjs);
 	};
 
