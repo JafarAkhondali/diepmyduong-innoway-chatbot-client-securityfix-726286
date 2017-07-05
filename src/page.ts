@@ -196,4 +196,24 @@ export class Page {
             callback(err,status);
         });
     }
+
+    //Author: Dương Jerry
+    //Description: Remove Story
+    public getStartedStory(callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/settings/getStartedStory"),
+            "method": "GET",
+            "headers": {
+                "access_token": self._token
+            }
+        }
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        });
+    }
 }

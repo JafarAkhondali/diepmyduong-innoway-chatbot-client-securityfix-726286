@@ -532,6 +532,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Remove Story
+	    Page.prototype.getStartedStory = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/settings/getStartedStory"),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
 	    Page.SettingTypes = {
 	        GREETING: "greeting",
 	        PRESISTENT_MENU: "persistent_menu",
