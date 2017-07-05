@@ -547,6 +547,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        };
 	        $.ajax(settings).done(function (response) {
+	            if (response != null) {
+	                response = self.buildStory(response);
+	            }
 	            callback(null, response);
 	        }).fail(function (request, err, status) {
 	            callback(err, status);
