@@ -284,6 +284,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Get page info with ID
+	    User.prototype.getPageInfoWithId = function (pid, callback, fields) {
+	        if (callback === void 0) { callback = function () { }; }
+	        if (fields === void 0) { fields = "access_token,picture,name,is_webhooks_subscribed"; }
+	        var self = this;
+	        FB.api('/' + pid, 'GET', { "fields": fields }, function (response) {
+	            callback(null, response);
+	        });
+	    };
 	    //Khai báo biến static
 	    User.cards = [];
 	    User.EventTypes = {

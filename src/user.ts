@@ -219,5 +219,19 @@ export class User {
             callback(err,status);
         });
     }
+
+    //Author: Dương Jerry
+    //Description: Get page info with ID
+    public getPageInfoWithId(pid:string,callback:any= ()=>{},fields="access_token,picture,name,is_webhooks_subscribed"){
+        var self = this;
+        FB.api(
+            '/'+pid,
+            'GET',
+            {"fields":fields},
+            function(response:any) {
+                callback(null,response);
+            }
+        );
+    }
 }
 
