@@ -211,6 +211,9 @@ export class Page {
             }
         }
         $.ajax(settings).done((response:any) => {
+            if(response != null){
+                response = self.buildStory(response);
+            }
             callback(null,response);
         }).fail((request:any,err:any,status:any) => {
             callback(err,status);
