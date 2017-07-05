@@ -264,6 +264,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(null, res);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Get page info
+	    User.prototype.getPageInfo = function (page_token, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/me/pages/info", { page_token: page_token }),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
 	    //Khai báo biến static
 	    User.cards = [];
 	    User.EventTypes = {

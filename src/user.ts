@@ -198,5 +198,26 @@ export class User {
             }
         )
     }
+
+    //Author: Dương Jerry
+    //Description: Get page info
+    public getPageInfo(page_token:string,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/me/pages/info",{page_token: page_token}),
+            "method": "GET",
+            "headers": {
+                "access_token": self._token
+            }
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        });
+    }
 }
 
