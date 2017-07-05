@@ -125,6 +125,7 @@ export class User {
         this._token = null;
         this.user = null;
         this.authenticated = false;
+        $(this).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,this.authenticated);
     }
 
     //GET LIST FAN PAGE

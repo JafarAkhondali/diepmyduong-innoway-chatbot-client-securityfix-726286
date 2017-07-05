@@ -190,6 +190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._token = null;
 	        this.user = null;
 	        this.authenticated = false;
+	        $(this).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE, this.authenticated);
 	    };
 	    //GET LIST FAN PAGE
 	    User.prototype.getPages = function (callback) {
@@ -812,7 +813,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        FB.init({
 	            appId: default_config_1.DefaultConfig.facebook.app_id,
 	            xfbml: true,
-	            version: 'v2.9'
+	            version: 'v2.9',
+	            cookie: true,
+	            status: true
 	        });
 	        FB.AppEvents.logPageView();
 	        window.fbLoaded = true;

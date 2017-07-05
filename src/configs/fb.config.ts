@@ -12,7 +12,9 @@ export const FBConfig= () => {
         FB.init({
             appId      : DefaultConfig.facebook.app_id,
             xfbml      : true,
-            version    : 'v2.9'
+            version    : 'v2.9',
+            cookie     : true,
+            status     : true
         });
         FB.AppEvents.logPageView();
         window.fbLoaded = true;
