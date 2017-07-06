@@ -36,6 +36,14 @@ export class User {
                 })
             })
         }else{
+            FB.init({
+                appId      : DefaultConfig.facebook.app_id,
+                xfbml      : true,
+                version    : 'v2.9',
+                cookie     : true,
+                status     : true
+            });
+            FB.AppEvents.logPageView();
             FB.getLoginStatus((res:any) =>{
                 console.log("LOGIN STATUS ",res);
                 if(res.status === "connected"){
