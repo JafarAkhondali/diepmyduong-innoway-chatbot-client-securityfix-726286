@@ -22,7 +22,7 @@ export const FBConfig= () => {
     };
     var js:any, fjs:any = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
+    js = d.createElement(s); js.id = id; js.async = true;
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 };
