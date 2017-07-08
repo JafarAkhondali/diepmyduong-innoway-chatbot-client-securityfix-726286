@@ -9,6 +9,7 @@ export const FBConfig= () => {
     var s = 'script';
     var id = 'facebook-jssdk';
     window.fbAsyncInit = function() {
+        console.log("INIT FACEBOOK SDK");
         FB.init({
             appId      : DefaultConfig.facebook.app_id,
             xfbml      : true,
@@ -25,4 +26,5 @@ export const FBConfig= () => {
     js = d.createElement(s); js.id = id; js.async = true;
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
+    console.log("ADD FACEBOOK SDK",fjs.parentNode);
 };

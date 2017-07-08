@@ -78,13 +78,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var helper_1 = __webpack_require__(3);
+	//Import Config
+	var default_config_1 = __webpack_require__(3);
+	var helper_1 = __webpack_require__(4);
 	var User = (function () {
 	    //Hàm khởi tạo với tham số token là Optional
 	    function User(token) {
 	        if (token === void 0) { token = null; }
 	        this.authenticated = false;
 	        var self = this;
+	        console.log("Init User Object");
 	        if (!window.fbLoaded) {
 	            $(window).on("innoway-chatbot.fbLoaded", function () {
 	                console.log("FACEBOOK LOADED");
@@ -102,6 +105,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 	        else {
+	            FB.init({
+	                appId: default_config_1.DefaultConfig.facebook.app_id,
+	                xfbml: true,
+	                version: 'v2.9',
+	                cookie: true,
+	                status: true
+	            });
+	            FB.AppEvents.logPageView();
 	            FB.getLoginStatus(function (res) {
 	                console.log("LOGIN STATUS ", res);
 	                if (res.status === "connected") {
@@ -307,10 +318,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	exports.DefaultConfig = {
+	    host: "https://jerry-chatbot.herokuapp.com/",
+	    facebook: {
+	        app_id: "143366482876596" //Innoway
+	    }
+	};
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var default_config_1 = __webpack_require__(4);
+	var default_config_1 = __webpack_require__(3);
 	var URL = (function () {
 	    function URL() {
 	    }
@@ -340,24 +364,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	exports.DefaultConfig = {
-	    host: "https://jerry-chatbot.herokuapp.com/",
-	    facebook: {
-	        app_id: "143366482876596" //Innoway
-	    }
-	};
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var helper_1 = __webpack_require__(3);
+	var helper_1 = __webpack_require__(4);
 	var story_1 = __webpack_require__(6);
 	var Page = (function () {
 	    function Page(token) {
@@ -574,7 +585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var helper_1 = __webpack_require__(3);
+	var helper_1 = __webpack_require__(4);
 	var page_1 = __webpack_require__(5);
 	var Story = (function () {
 	    function Story(page, story) {
@@ -856,13 +867,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var default_config_1 = __webpack_require__(4);
+	var default_config_1 = __webpack_require__(3);
 	//Facebook Config
 	exports.FBConfig = function () {
 	    var d = document;
 	    var s = 'script';
 	    var id = 'facebook-jssdk';
 	    window.fbAsyncInit = function () {
+	        console.log("INIT FACEBOOK SDK");
 	        FB.init({
 	            appId: default_config_1.DefaultConfig.facebook.app_id,
 	            xfbml: true,
@@ -880,8 +892,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    js = d.createElement(s);
 	    js.id = id;
+	    js.async = true;
 	    js.src = "//connect.facebook.net/en_US/sdk.js";
 	    fjs.parentNode.insertBefore(js, fjs);
+	    console.log("ADD FACEBOOK SDK", fjs.parentNode);
 	};
 
 

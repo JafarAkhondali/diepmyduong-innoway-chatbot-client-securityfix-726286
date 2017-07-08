@@ -20,6 +20,7 @@ export class User {
     //Hàm khởi tạo với tham số token là Optional
     constructor(token:string = null){
         var self = this;
+        console.log("Init User Object");
         if(!window.fbLoaded){
             $(window).on("innoway-chatbot.fbLoaded",()=>{
                 console.log("FACEBOOK LOADED");
