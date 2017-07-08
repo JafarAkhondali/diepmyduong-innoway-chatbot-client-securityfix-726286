@@ -63,9 +63,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	var user_1 = __webpack_require__(2);
-	var page_1 = __webpack_require__(5);
+	var page_1 = __webpack_require__(6);
 	//LOAD DACEBOOK CONFIG
-	var fb_config_1 = __webpack_require__(7);
+	var fb_config_1 = __webpack_require__(5);
 	fb_config_1.FBConfig();
 	module.exports = {
 	    User: user_1.User,
@@ -78,9 +78,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	//Import Config
-	var default_config_1 = __webpack_require__(3);
-	var helper_1 = __webpack_require__(4);
+	var helper_1 = __webpack_require__(3);
+	var fb_config_1 = __webpack_require__(5);
 	var User = (function () {
 	    //Hàm khởi tạo với tham số token là Optional
 	    function User(token) {
@@ -88,31 +87,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.authenticated = false;
 	        var self = this;
 	        console.log("Init User Object");
-	        if (!window.fbLoaded) {
-	            $(window).on("innoway-chatbot.fbLoaded", function () {
-	                console.log("FACEBOOK LOADED");
-	                FB.getLoginStatus(function (res) {
-	                    console.log("LOGIN STATUS ", res);
-	                    if (res.status === "connected") {
-	                        self._token = res.authResponse.accessToken;
-	                        self.authenticated = true;
-	                        $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE, self.authenticated);
-	                    }
-	                    else {
-	                        console.log("not connected");
-	                    }
-	                });
-	            });
-	        }
-	        else {
-	            FB.init({
-	                appId: default_config_1.DefaultConfig.facebook.app_id,
-	                xfbml: true,
-	                version: 'v2.9',
-	                cookie: true,
-	                status: true
-	            });
-	            FB.AppEvents.logPageView();
+	        fb_config_1.FBConfig(function () {
+	            console.log("FACEBOOK LOADED");
 	            FB.getLoginStatus(function (res) {
 	                console.log("LOGIN STATUS ", res);
 	                if (res.status === "connected") {
@@ -124,7 +100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    console.log("not connected");
 	                }
 	            });
-	        }
+	        });
 	    }
 	    //Khai báo hàm private 
 	    //Tham số là 1 hàm callback Optional
@@ -318,23 +294,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	exports.DefaultConfig = {
-	    host: "https://jerry-chatbot.herokuapp.com/",
-	    facebook: {
-	        app_id: "143366482876596" //Innoway
-	    }
-	};
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var default_config_1 = __webpack_require__(3);
+	var default_config_1 = __webpack_require__(4);
 	var URL = (function () {
 	    function URL() {
 	    }
@@ -364,12 +327,62 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	exports.DefaultConfig = {
+	    host: "https://jerry-chatbot.herokuapp.com/",
+	    facebook: {
+	        app_id: "143366482876596" //Innoway
+	    }
+	};
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var helper_1 = __webpack_require__(4);
-	var story_1 = __webpack_require__(6);
+	var default_config_1 = __webpack_require__(4);
+	//Facebook Config
+	exports.FBConfig = function (callback) {
+	    if (callback === void 0) { callback = function () { }; }
+	    var d = document;
+	    var s = 'script';
+	    var id = 'facebook-jssdk';
+	    window.fbAsyncInit = function () {
+	        console.log("INIT FACEBOOK SDK");
+	        FB.init({
+	            appId: default_config_1.DefaultConfig.facebook.app_id,
+	            xfbml: true,
+	            version: 'v2.9',
+	            cookie: true,
+	            status: true
+	        });
+	        FB.AppEvents.logPageView();
+	        callback();
+	    };
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) {
+	        return;
+	    }
+	    js = d.createElement(s);
+	    js.id = id;
+	    js.async = true;
+	    js.src = "//connect.facebook.net/en_US/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+	    console.log("ADD FACEBOOK SDK", fjs.parentNode);
+	};
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var helper_1 = __webpack_require__(3);
+	var story_1 = __webpack_require__(7);
 	var Page = (function () {
 	    function Page(token) {
 	        this._token = token;
@@ -581,12 +594,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var helper_1 = __webpack_require__(4);
-	var page_1 = __webpack_require__(5);
+	var helper_1 = __webpack_require__(3);
+	var page_1 = __webpack_require__(6);
 	var Story = (function () {
 	    function Story(page, story) {
 	        this._page = page;
@@ -860,43 +873,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Story;
 	}());
 	exports.Story = Story;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var default_config_1 = __webpack_require__(3);
-	//Facebook Config
-	exports.FBConfig = function () {
-	    var d = document;
-	    var s = 'script';
-	    var id = 'facebook-jssdk';
-	    window.fbAsyncInit = function () {
-	        console.log("INIT FACEBOOK SDK");
-	        FB.init({
-	            appId: default_config_1.DefaultConfig.facebook.app_id,
-	            xfbml: true,
-	            version: 'v2.9',
-	            cookie: true,
-	            status: true
-	        });
-	        FB.AppEvents.logPageView();
-	        window.fbLoaded = true;
-	        $(window).trigger("innoway-chatbot.fbLoaded", window.fbLoaded);
-	    };
-	    var js, fjs = d.getElementsByTagName(s)[0];
-	    if (d.getElementById(id)) {
-	        return;
-	    }
-	    js = d.createElement(s);
-	    js.id = id;
-	    js.async = true;
-	    js.src = "//connect.facebook.net/en_US/sdk.js";
-	    fjs.parentNode.insertBefore(js, fjs);
-	    console.log("ADD FACEBOOK SDK", fjs.parentNode);
-	};
 
 
 /***/ })

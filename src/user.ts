@@ -1,6 +1,7 @@
 //Import Config
 import { DefaultConfig } from './configs/default.config';
 import { URL } from './utils/helper';
+import {  FBConfig } from './configs/fb.config';
 
 declare var $:any,FB:any,gapi:any,window:any;
 
@@ -21,30 +22,8 @@ export class User {
     constructor(token:string = null){
         var self = this;
         console.log("Init User Object");
-        if(!window.fbLoaded){
-            $(window).on("innoway-chatbot.fbLoaded",()=>{
-                console.log("FACEBOOK LOADED");
-                FB.getLoginStatus((res:any) =>{
-                    console.log("LOGIN STATUS ",res);
-                    if(res.status === "connected"){
-                        self._token = res.authResponse.accessToken;
-                        self.authenticated = true;
-                        $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
-                    }else{
-                        console.log("not connected");
-                        // self.loginWithFacebook();
-                    }
-                })
-            })
-        }else{
-            FB.init({
-                appId      : DefaultConfig.facebook.app_id,
-                xfbml      : true,
-                version    : 'v2.9',
-                cookie     : true,
-                status     : true
-            });
-            FB.AppEvents.logPageView();
+        FBConfig(()=>{
+            console.log("FACEBOOK LOADED");
             FB.getLoginStatus((res:any) =>{
                 console.log("LOGIN STATUS ",res);
                 if(res.status === "connected"){
@@ -56,8 +35,7 @@ export class User {
                     // self.loginWithFacebook();
                 }
             })
-        }
-        
+        });
     } 
 
     //Khai báo hàm private 

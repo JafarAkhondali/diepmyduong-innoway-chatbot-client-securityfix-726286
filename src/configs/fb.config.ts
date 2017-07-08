@@ -4,7 +4,8 @@ declare var $:any,window:any,FB:any;
 //Facebook Config
 
 
-export const FBConfig= () => {
+export const FBConfig= (callback:any = ()=>{}) => {
+    
     var d = document;
     var s = 'script';
     var id = 'facebook-jssdk';
@@ -18,8 +19,7 @@ export const FBConfig= () => {
             status     : true
         });
         FB.AppEvents.logPageView();
-        window.fbLoaded = true;
-        $(window).trigger("innoway-chatbot.fbLoaded",window.fbLoaded);
+        callback();
     };
     var js:any, fjs:any = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {return;}
