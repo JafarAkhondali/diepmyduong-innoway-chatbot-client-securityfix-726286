@@ -345,31 +345,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	//Facebook Config
 	exports.FBConfig = function (callback) {
 	    if (callback === void 0) { callback = function () { }; }
-	    var d = document;
-	    var s = 'script';
-	    var id = 'facebook-jssdk';
-	    window.fbAsyncInit = function () {
-	        console.log("INIT FACEBOOK SDK");
-	        FB.init({
-	            appId: default_config_1.DefaultConfig.facebook.app_id,
-	            xfbml: true,
-	            version: 'v2.9',
-	            cookie: true,
-	            status: true
-	        });
-	        FB.AppEvents.logPageView();
-	        callback();
+	    window.onload = function () {
+	        var d = document;
+	        var s = 'script';
+	        var id = 'facebook-jssdk';
+	        window.fbAsyncInit = function () {
+	            console.log("INIT FACEBOOK SDK");
+	            FB.init({
+	                appId: default_config_1.DefaultConfig.facebook.app_id,
+	                xfbml: true,
+	                version: 'v2.9',
+	                cookie: true,
+	                status: true
+	            });
+	            FB.AppEvents.logPageView();
+	            callback();
+	        };
+	        var js, fjs = d.getElementsByTagName(s)[0];
+	        if (d.getElementById(id)) {
+	            return;
+	        }
+	        js = d.createElement(s);
+	        js.id = id;
+	        js.async = true;
+	        js.src = "//connect.facebook.net/en_US/sdk.js";
+	        fjs.parentNode.insertBefore(js, fjs);
+	        console.log("ADD FACEBOOK SDK", fjs.parentNode);
 	    };
-	    var js, fjs = d.getElementsByTagName(s)[0];
-	    if (d.getElementById(id)) {
-	        return;
-	    }
-	    js = d.createElement(s);
-	    js.id = id;
-	    js.async = true;
-	    js.src = "//connect.facebook.net/en_US/sdk.js";
-	    fjs.parentNode.insertBefore(js, fjs);
-	    console.log("ADD FACEBOOK SDK", fjs.parentNode);
 	};
 
 
