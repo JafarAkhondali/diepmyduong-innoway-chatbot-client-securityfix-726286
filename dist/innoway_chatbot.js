@@ -64,9 +64,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	var user_1 = __webpack_require__(2);
 	var page_1 = __webpack_require__(6);
-	//LOAD DACEBOOK CONFIG
-	var fb_config_1 = __webpack_require__(5);
-	fb_config_1.FBConfig();
 	module.exports = {
 	    User: user_1.User,
 	    Page: page_1.Page
