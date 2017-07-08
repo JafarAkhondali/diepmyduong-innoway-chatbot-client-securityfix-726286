@@ -5,7 +5,7 @@ declare var $:any,window:any,FB:any;
 
 
 export const FBConfig= (callback:any = ()=>{}) => {
-    window.onload = () => {
+    $(document).ready(() =>{
         var d = document;
         var s = 'script';
         var id = 'facebook-jssdk';
@@ -25,8 +25,7 @@ export const FBConfig= (callback:any = ()=>{}) => {
         if (d.getElementById(id)) {return;}
         js = d.createElement(s); js.id = id; js.async = true;
         js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-        console.log("ADD FACEBOOK SDK",fjs.parentNode);
-    }
-    
+        d.getElementsByTagName('head')[0].appendChild(js)
+        console.log("ADD FACEBOOK SDK");
+    })
 };

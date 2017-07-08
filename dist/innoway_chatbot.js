@@ -345,7 +345,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//Facebook Config
 	exports.FBConfig = function (callback) {
 	    if (callback === void 0) { callback = function () { }; }
-	    window.onload = function () {
+	    $(document).ready(function () {
 	        var d = document;
 	        var s = 'script';
 	        var id = 'facebook-jssdk';
@@ -369,9 +369,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        js.id = id;
 	        js.async = true;
 	        js.src = "//connect.facebook.net/en_US/sdk.js";
-	        fjs.parentNode.insertBefore(js, fjs);
-	        console.log("ADD FACEBOOK SDK", fjs.parentNode);
-	    };
+	        d.getElementsByTagName('head')[0].appendChild(js);
+	        console.log("ADD FACEBOOK SDK");
+	    });
 	};
 
 
