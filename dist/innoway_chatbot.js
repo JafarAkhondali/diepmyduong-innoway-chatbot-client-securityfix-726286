@@ -664,6 +664,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Send to list Subscriber
+	    Page.prototype.sendToSubscribers = function (data, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/send/toSubscriber"),
+	            "method": "POST",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	            "data": JSON.stringify(data)
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Send to All Subscriber
+	    Page.prototype.sendToAllSubscribers = function (data, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/send/toAll"),
+	            "method": "POST",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	            "data": JSON.stringify(data)
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
 	    Page.SettingTypes = {
 	        GREETING: "greeting",
 	        PRESISTENT_MENU: "persistent_menu",

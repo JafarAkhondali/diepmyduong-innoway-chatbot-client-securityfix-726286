@@ -309,4 +309,52 @@ export class Page {
             callback(err,status);
         }); 
     }
+
+    //Author: Dương Jerry
+    //Description: Send to list Subscriber
+    public sendToSubscribers(data:any,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/send/toSubscriber"),
+            "method": "POST",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json",
+            },
+            "processData": false,
+            "data": JSON.stringify(data)
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        }); 
+    }
+
+    //Author: Dương Jerry
+    //Description: Send to All Subscriber
+    public sendToAllSubscribers(data:any,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/send/toAll"),
+            "method": "POST",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json",
+            },
+            "processData": false,
+            "data": JSON.stringify(data)
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        }); 
+    }
 }
