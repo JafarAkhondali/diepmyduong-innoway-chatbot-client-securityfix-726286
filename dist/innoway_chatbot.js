@@ -578,6 +578,92 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(err, status);
 	        });
 	    };
+	    //Author: Dương Jerry
+	    //Description: Get all Subscriber
+	    Page.prototype.getSubscribers = function (callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/subscribers"),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json"
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Get one Subscriber
+	    Page.prototype.getSubscriber = function (sub_id, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/subscribers/{{sub_id}}", null, { sub_id: sub_id }),
+	            "method": "GET",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json"
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Update one Subscriber
+	    Page.prototype.editSubscriber = function (sub_id, data, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/subscribers/{{sub_id}}", null, { sub_id: sub_id }),
+	            "method": "PUT",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            },
+	            "processData": false,
+	            "data": JSON.stringify(data)
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
+	    //Author: Dương Jerry
+	    //Description: Remove one Subscriber
+	    Page.prototype.removeSubscriber = function (sub_id, callback) {
+	        if (callback === void 0) { callback = function () { }; }
+	        var self = this;
+	        var settings = {
+	            "async": true,
+	            "crossDomain": true,
+	            "url": helper_1.URL.apiUrl("api/page/subscribers/{{sub_id}}", null, { sub_id: sub_id }),
+	            "method": "DELETE",
+	            "headers": {
+	                "access_token": self._token,
+	                "content-type": "application/json",
+	            }
+	        };
+	        $.ajax(settings).done(function (response) {
+	            callback(null, response);
+	        }).fail(function (request, err, status) {
+	            callback(err, status);
+	        });
+	    };
 	    Page.SettingTypes = {
 	        GREETING: "greeting",
 	        PRESISTENT_MENU: "persistent_menu",

@@ -219,4 +219,94 @@ export class Page {
             callback(err,status);
         });
     }
+
+    //Author: Dương Jerry
+    //Description: Get all Subscriber
+    public getSubscribers(callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/subscribers"),
+            "method": "GET",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json"
+            }
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        }); 
+    }
+
+    //Author: Dương Jerry
+    //Description: Get one Subscriber
+    public getSubscriber(sub_id:string,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/subscribers/{{sub_id}}",null,{sub_id:sub_id}),
+            "method": "GET",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json"
+            }
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        }); 
+    }
+
+    //Author: Dương Jerry
+    //Description: Update one Subscriber
+    public editSubscriber(sub_id:string,data:any,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/subscribers/{{sub_id}}",null,{sub_id:sub_id}),
+            "method": "PUT",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json",
+            },
+            "processData": false,
+            "data": JSON.stringify(data)
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        }); 
+    }
+
+    //Author: Dương Jerry
+    //Description: Remove one Subscriber
+    public removeSubscriber(sub_id:string,callback:any = ()=>{}){
+        var self = this;
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": URL.apiUrl("api/page/subscribers/{{sub_id}}",null,{sub_id:sub_id}),
+            "method": "DELETE",
+            "headers": {
+                "access_token": self._token,
+                "content-type": "application/json",
+            }
+        }
+
+        $.ajax(settings).done((response:any) => {
+            callback(null,response);
+        }).fail((request:any,err:any,status:any) => {
+            callback(err,status);
+        }); 
+    }
 }
