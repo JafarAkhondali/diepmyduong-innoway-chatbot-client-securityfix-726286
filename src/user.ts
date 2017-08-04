@@ -100,7 +100,7 @@ export class User {
                 callback('User cancelled login or did not fully authorize.',null);
             }
             $(self).trigger(User.EventTypes.AUTHENTICATE_STATECHANGE,self.authenticated);
-        });
+        },{scope: 'business_management,email,manage_pages,pages_messaging,public_profile,publish_pages,user_friends'});
     }
 
     //LOGOUT
